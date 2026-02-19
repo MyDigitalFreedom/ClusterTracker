@@ -57,9 +57,12 @@ ClusterTracker helps you log attacks in real time, track oxygen therapy, record 
 ```bash
 git clone https://github.com/MyDigitalFreedom/ClusterTracker.git
 cd ClusterTracker
-./gradlew assembleDebug
 ```
-The debug APK will be at `app/build/outputs/apk/debug/app-debug.apk`.
+To build a release APK, create a `keystore.properties` file in the project root with your own signing key, then run:
+```bash
+./gradlew assembleRelease
+```
+The signed APK will be at `app/build/outputs/apk/release/app-release.apk`.
 
 ## Tech Stack
 
