@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-private const val DEFAULT_WEATHER_API_KEY = "71485c56f0346f27cdb4916064d238c1"
+private const val DEFAULT_WEATHER_API_KEY = ""
 
 data class AppPreferences(
     val weatherApiKey: String = DEFAULT_WEATHER_API_KEY,

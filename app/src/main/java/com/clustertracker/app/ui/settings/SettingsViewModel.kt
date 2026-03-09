@@ -44,8 +44,14 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { preferencesManager.setWeatherApiKey(key) }
     }
 
+    private var lastSearchTime = 0L
+
     fun searchCity(query: String) {
         if (query.length < 2) return
+        val now = System.currentTimeMillis()
+        if (now - lastSearchTime < 2000L) return // 2-second cooldown
+        lastSearchTime = now
+
         val apiKey = preferences.value.weatherApiKey
         if (apiKey.isBlank()) {
             viewModelScope.launch {

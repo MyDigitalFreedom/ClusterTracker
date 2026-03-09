@@ -1,5 +1,6 @@
 package com.clustertracker.app.di
 
+import com.clustertracker.app.BuildConfig
 import com.clustertracker.app.data.remote.GeocodingApiService
 import com.clustertracker.app.data.remote.WeatherApiService
 import dagger.Module
@@ -25,7 +26,10 @@ object NetworkModule {
     fun provideOkHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
+                level = if (BuildConfig.DEBUG)
+                    HttpLoggingInterceptor.Level.BASIC
+                else
+                    HttpLoggingInterceptor.Level.NONE
             })
             .build()
 

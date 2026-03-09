@@ -326,7 +326,9 @@ private fun SectionHeader(text: String) {
 }
 
 private fun shareTextFile(context: Context, filename: String, content: String) {
-    val file = File(context.cacheDir, filename)
+    val exportDir = File(context.cacheDir, "exports")
+    exportDir.mkdirs()
+    val file = File(exportDir, filename)
     file.writeText(content)
     val uri = FileProvider.getUriForFile(
         context,

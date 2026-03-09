@@ -67,6 +67,12 @@ data class ExportEnvironment(
     val moonIllumination: Double?
 )
 
+private fun csvSafe(value: String): String {
+    val escaped = value.replace("\"", "\"\"")
+    return if (escaped.firstOrNull() in listOf('=', '+', '-', '@'))
+        "\"'$escaped\"" else "\"$escaped\""
+}
+
 @Singleton
 class DataExporter @Inject constructor(
     private val cycleDao: CycleDao,
@@ -135,7 +141,7 @@ class DataExporter @Inject constructor(
         result["cycles.csv"] = buildString {
             appendLine("id,name,start_date,end_date,notes")
             cycles.forEach { c ->
-                appendLine("${c.id},\"${c.name}\",${c.startDate},${c.endDate ?: ""},\"${c.notes ?: ""}\"")
+                appendLine("${c.id},${csvSafe(c.name)},${c.startDate},${c.endDate ?: ""},${csvSafe(c.notes ?: "")}")
             }
         }
 
@@ -175,7 +181,7 @@ class DataExporter @Inject constructor(
             appendLine("attack_id,timestamp,note")
             allAttacks.forEach { attack ->
                 therapyNoteDao.getNotesForAttack(attack.id).first().forEach { n ->
-                    appendLine("${n.attackId},${n.timestamp.toEpochMilli()},\"${n.note}\"")
+                    appendLine("${n.attackId},${n.timestamp.toEpochMilli()},${csvSafe(n.note)}")
                 }
             }
         }
@@ -185,7 +191,7 @@ class DataExporter @Inject constructor(
             appendLine("attack_id,city,lat,lon,temp_c,pressure_hpa,humidity,moon_phase,moon_illumination")
             allAttacks.forEach { attack ->
                 envDao.getDataForAttack(attack.id).first()?.let { e ->
-                    appendLine("${e.attackId},\"${e.cityName ?: ""}\",${e.latitude ?: ""},${e.longitude ?: ""},${e.temperatureCelsius ?: ""},${e.barometricPressureHpa ?: ""},${e.humidity ?: ""},\"${e.moonPhaseName ?: ""}\",${e.moonIlluminationFraction ?: ""}")
+                    appendLine("${e.attackId},${csvSafe(e.cityName ?: "")},${e.latitude ?: ""},${e.longitude ?: ""},${e.temperatureCelsius ?: ""},${e.barometricPressureHpa ?: ""},${e.humidity ?: ""},${csvSafe(e.moonPhaseName ?: "")},${e.moonIlluminationFraction ?: ""}")
                 }
             }
         }
