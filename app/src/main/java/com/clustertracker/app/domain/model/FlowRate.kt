@@ -2,7 +2,7 @@ package com.clustertracker.app.domain.model
 
 /** Utility for converting between stored flow rate strings and Int L/min values. */
 object FlowRate {
-    const val DEFAULT = 15
+    const val DEFAULT = 10
     const val MIN = 6
     const val MAX = 25
 
